@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{ action }} shop</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>{{ action }} shop</h1>
+    <form method="post">
+      <label>Shop name *</label>
+      <input name="name" required value="{{ shop['name'] if shop else '' }}">
+      <label>Category</label>
+      <input name="category" value="{{ shop['category'] if shop else '' }}">
+      <label>Phone</label>
+      <input name="phone" value="{{ shop['phone'] if shop else '' }}">
+      <label>Address</label>
+      <input name="address" value="{{ shop['address'] if shop else '' }}">
+      <label>Website / Map URL</label>
+      <input name="url" value="{{ shop['url'] if shop else '' }}">
+      <label>Note</label>
+      <textarea name="note">{{ shop['note'] if shop else '' }}</textarea>
+
+      <div class="form-actions">
+        <button type="submit">{{ action }}</button>
+        <a class="btn" href="{{ url_for('index') }}">Back</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

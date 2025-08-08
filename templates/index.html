@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Shop List</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>📋 Shop List</h1>
+
+    <div class="actions">
+      <form method="get" class="searchform">
+        <input type="text" name="q" placeholder="Search name, address, phone..." value="{{ q }}">
+        <select name="category">
+          <option value="">-- All categories --</option>
+          {% for c in categories %}
+            <option value="{{ c }}" {% if c==cat_selected %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit">Search</button>
+        <a class="btn" href="{{ url_for('add') }}">+ Add shop</a>
+        <a class="btn" href="{{ url_for('export_csv') }}">Export CSV</a>
+      </form>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="messages">
+          {% for m in messages %}<li>{{ m }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="shop-list">
+      {% if shops %}
+        {% for s in shops %}
+        <div class="shop">
+          <div class="left">
+            <strong>{{ s['name'] }}</strong><br>
+            <small>{{ s['category'] or "" }} · {{ s['phone'] or "" }}</small>
+            <div class="addr">{{ s['address'] or "" }}</div>
+            {% if s['note'] %}<div class="note">{{ s['note'] }}</div>{% endif %}
+            {% if s['url'] %}<div><a href="{{ s['url'] }}" target="_blank">Website / Map</a></div>{% endif %}
+          </div>
+          <div class="right">
+            <a href="{{ url_for('edit', shop_id=s['id']) }}">Edit</a>
+            <form method="post" action="{{ url_for('delete', shop_id=s['id']) }}" onsubmit="return confirm('Delete this shop?');">
+              <button type="submit" class="danger">Delete</button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>No shops yet. Click "Add shop" to create one.</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
